@@ -109,6 +109,7 @@ Use it on a trusted server to upload and manage files, prepare direct browser up
 
 ## Documentation
 
+- [PHP SDK guide](https://portabyte.dev/docs/getting-started/php-sdk)
 - [REST API reference](https://portabyte.dev/docs/api-reference)
 - [Public and private files](https://portabyte.dev/docs/upload-delivery/public-and-private-files)
 
