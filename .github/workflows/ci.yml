@@ -22,7 +22,7 @@ jobs:
           for file in src/*.php tests/*.php; do
             php -l "$file"
           done
-      - name: Exercise HTTP transport
+      - name: Exercise HTTP and file flows
         run: |
           php -S 127.0.0.1:8765 tests/server.php > /tmp/portabyte-php-test.log 2>&1 &
           server_pid=$!

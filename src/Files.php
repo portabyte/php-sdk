@@ -105,6 +105,25 @@ final class Files
         $this->http->api('DELETE', 'assets/' . rawurlencode($assetId));
     }
 
+    /**
+     * Abort a multipart transfer if started, then remove its pending asset.
+     * The signed gateway abort is best effort; removing the asset prevents confirmation.
+     * @param array<string, mixed> $session
+     * @param array<string, mixed> $state
+     */
+    public function cancel(array $session, array $state = []): void
+    {
+        $uploadId = $state['uploadId'] ?? null;
+        if (($session['uploadMode'] ?? null) === 'multipart' && is_string($uploadId) && $uploadId !== '') {
+            try {
+                $this->http->signedJson('DELETE', $this->requiredString($session, 'uploadUrl') . '/multipart/' . rawurlencode($uploadId));
+            } catch (PortabyteException) {
+                // Removing the pending asset is still required if the signed URL expired.
+            }
+        }
+        $this->remove($this->requiredString($session, 'id'));
+    }
+
     /** @return array<string, mixed> */
     public function url(string $assetId): array
     {
@@ -181,12 +200,15 @@ final class Files
             $onStateChange && $onStateChange($state);
         }
         $parts = [];
-        foreach ($state['parts'] ?? [] as $part) {
-            if (is_array($part) && isset($part['partNumber'], $part['etag'])) {
-                $parts[(int) $part['partNumber']] = $part;
-            }
-        }
         $count = (int) ceil($size / $partSize);
+        foreach ($state['parts'] ?? [] as $part) {
+            if (!is_array($part) || !is_int($part['partNumber'] ?? null) ||
+                $part['partNumber'] < 1 || $part['partNumber'] > $count ||
+                !is_string($part['etag'] ?? null) || $part['etag'] === '') {
+                throw new PortabyteException('Multipart state contains an invalid part.', 0, 'invalid_argument');
+            }
+            $parts[$part['partNumber']] = $part;
+        }
         for ($number = 1; $number <= $count; $number++) {
             if (isset($parts[$number])) {
                 continue;

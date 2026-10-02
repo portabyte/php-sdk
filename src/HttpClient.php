@@ -11,7 +11,10 @@ final class HttpClient
 {
     private const API_URL = 'https://api.portabyte.dev';
 
-    public function __construct(private readonly string $apiKey)
+    public function __construct(
+        private readonly string $apiKey,
+        private readonly string $apiUrl = self::API_URL,
+    )
     {
     }
 
@@ -20,7 +23,7 @@ final class HttpClient
     {
         return $this->request(
             $method,
-            self::API_URL . '/v1/' . $path,
+            $this->apiUrl . '/v1/' . $path,
             $body === null ? null : $this->encode($body),
             array_filter([
                 'Authorization: Bearer ' . $this->apiKey,
@@ -104,11 +107,13 @@ final class HttpClient
             throw new PortabyteException($networkError ?: 'Network request failed.', 0, 'network_error');
         }
         $decoded = [];
+        $validJson = $raw === '';
         if ($raw !== '') {
             try {
                 $value = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
                 if (is_array($value)) {
                     $decoded = $value;
+                    $validJson = true;
                 }
             } catch (JsonException) {
                 // An HTTP error may have a non-JSON body.
@@ -122,7 +127,7 @@ final class HttpClient
                 is_string($decoded['requestId'] ?? null) ? $decoded['requestId'] : ($responseHeaders['x-request-id'] ?? null),
             );
         }
-        if ($raw !== '' && $decoded === []) {
+        if (!$validJson) {
             throw new PortabyteException('Portabyte returned an invalid JSON response.', $status, 'invalid_response');
         }
         return $decoded;
