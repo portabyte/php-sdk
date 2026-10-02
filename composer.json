@@ -1,0 +1,23 @@
+{
+  "name": "portabyte/php",
+  "description": "Official PHP SDK for Portabyte file infrastructure.",
+  "keywords": ["portabyte", "files", "upload", "sdk"],
+  "homepage": "https://portabyte.dev",
+  "type": "library",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/portabyte/php-sdk/issues",
+    "source": "https://github.com/portabyte/php-sdk"
+  },
+  "require": {
+    "php": "^8.1",
+    "ext-curl": "*",
+    "ext-fileinfo": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Portabyte\\": "src/"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+name: Verify PHP SDK
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4']
+    container: php:${{ matrix.php }}-cli
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check syntax
+        run: |
+          for file in src/*.php tests/*.php; do
+            php -l "$file"
+          done
+      - name: Exercise HTTP transport
+        run: |
+          php -S 127.0.0.1:8765 tests/server.php > /tmp/portabyte-php-test.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          sleep 1
+          php tests/http.php
