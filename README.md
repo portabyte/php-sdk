@@ -7,6 +7,10 @@
 
 Upload, deliver, and manage files from a PHP server with `portabyte/php`.
 
+[![Packagist version](https://img.shields.io/packagist/v/portabyte/php)](https://packagist.org/packages/portabyte/php)
+[![CI](https://github.com/portabyte/php-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/portabyte/php-sdk/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 ## Requirements
 
 - PHP 8.1 or later
@@ -17,23 +21,9 @@ Keep the key on your server. This SDK is not for browser code.
 
 ## Install
 
-This package is under development and is not yet published to Packagist. To use the local checkout, add it as a Composer path repository in your application's `composer.json`:
-
-```json
-{
-  "repositories": [
-    { "type": "path", "url": "../php-sdk" }
-  ]
-}
-```
-
-The path must point to this `php-sdk` directory. Then run:
-
 ```sh
-composer require portabyte/php:@dev
+composer require portabyte/php
 ```
-
-After publication, installation will be `composer require portabyte/php`.
 
 ## Quick start
 
