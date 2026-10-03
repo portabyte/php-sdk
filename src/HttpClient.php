@@ -14,8 +14,7 @@ final class HttpClient
     public function __construct(
         private readonly string $apiKey,
         private readonly string $apiUrl = self::API_URL,
-    )
-    {
+    ) {
     }
 
     /** @return array<string, mixed> */

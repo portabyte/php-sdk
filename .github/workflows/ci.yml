@@ -8,6 +8,14 @@ permissions:
   contents: read
 
 jobs:
+  format:
+    runs-on: ubuntu-latest
+    container: composer:2
+    steps:
+      - uses: actions/checkout@v4
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer format:check
+
   verify:
     runs-on: ubuntu-latest
     strategy:
