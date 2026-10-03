@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.1 - 2026-10-03
 
 - Cover complete file flows in the HTTP integration test.
 - Accept valid empty JSON object responses from the upload gateway.
