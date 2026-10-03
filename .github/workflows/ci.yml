@@ -8,6 +8,14 @@ permissions:
   contents: read
 
 jobs:
+  format:
+    runs-on: ubuntu-latest
+    container: composer:2
+    steps:
+      - uses: actions/checkout@v4
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer format:check
+
   verify:
     runs-on: ubuntu-latest
     strategy:
@@ -22,7 +30,7 @@ jobs:
           for file in src/*.php tests/*.php; do
             php -l "$file"
           done
-      - name: Exercise HTTP transport
+      - name: Exercise HTTP and file flows
         run: |
           php -S 127.0.0.1:8765 tests/server.php > /tmp/portabyte-php-test.log 2>&1 &
           server_pid=$!

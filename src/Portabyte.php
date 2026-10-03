@@ -6,7 +6,7 @@ namespace Portabyte;
 
 final class Portabyte
 {
-    public const VERSION = '0.1.0';
+    public const VERSION = '0.1.1';
 
     public readonly Files $files;
 

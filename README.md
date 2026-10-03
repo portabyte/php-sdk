@@ -86,6 +86,8 @@ $asset = $portabyte->files->resume(
 
 For uploads directly from a browser, call `files->prepareBrowserUpload()` and `files->confirm()` on your server. Send only the browser-safe session to the browser; never send the API key. See [Browser uploads](https://portabyte.dev/docs/upload-delivery/browser-uploads).
 
+To abandon a multipart session, call `$portabyte->files->cancel($session, $savedState)` to abort its transfer and remove the pending asset.
+
 ## Errors
 
 Failed requests throw `PortabyteException`:
@@ -112,6 +114,7 @@ Use it on a trusted server to upload and manage files, prepare direct browser up
 - [PHP SDK guide](https://portabyte.dev/docs/getting-started/php-sdk)
 - [REST API reference](https://portabyte.dev/docs/api-reference)
 - [Public and private files](https://portabyte.dev/docs/upload-delivery/public-and-private-files)
+- [Changelog](./CHANGELOG.md)
 
 ## Development
 
@@ -122,6 +125,8 @@ php -S 127.0.0.1:8765 tests/server.php
 ```
 
 In a second terminal, run `php tests/http.php`.
+
+For code style, install development dependencies with `composer install`, run `composer format` to apply PSR-12 formatting, and run `composer format:check` to verify it. CI runs the check on every pull request.
 
 ## License
 
